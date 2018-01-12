@@ -424,17 +424,45 @@ class HabiBot {
 
   /**
    * Walks the HabiBot's Avatar to the provided (x, y) coordinates.
-   * @param {int} x x coordinate to walk to
-   * @param {int} y y coordinate to walk to
+   * @param {int} x    coordinate to walk to
+   * @param {int} y    coordinate to walk to
+   * @param {int} how  direction Avatar is facing
    * @returns {Promise}
    */
-  walkTo(x, y) {
+  walkTo(x, y, how) {
     return this.sendWithDelay({
       op: 'WALK',
       to: 'ME',
       x: x,
       y: y,
-      how: 1,
+      how: how,
+    }, 10000);
+  }
+  
+  walkToAvatar(avatar) {
+    var curPos = avatar.mods[0];
+    var how =  0;
+    if(curPos.x <= 80) {
+        curPos.x = curPos.x + 20;
+    }
+    else
+        curPos.x = curPos.x - 20;
+        how = 1;
+    
+    return this.walkTo(curPos.x, curPos.y, how);
+  }
+  
+  /**
+  * Tells the HabiBot to "touch" an adjacent Avatar
+  * @param {int} 'target' the Avatar that the bot is touching
+  * @returns {Promise}
+  */
+  
+  touch(noid) {
+    return this.sendWithDelay({
+      op: 'TOUCH',
+      to: 'ME',
+      target: noid,
     }, 10000);
   }
 
